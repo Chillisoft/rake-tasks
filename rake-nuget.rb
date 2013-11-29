@@ -12,7 +12,7 @@ class GetNugetPackages
 	attr_accessor 	:NugetParameters ,
 					:package_names ,
 					:output_folder	,
-					:Source
+					:SourceUrl
 	
 	def execute
 		@command = "NuGet.exe"
