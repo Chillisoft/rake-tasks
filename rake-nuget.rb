@@ -24,7 +24,7 @@ class GetNugetPackages
 
 		@package_names.each do  |package|
 			@NugetParameters = "install #{package} -OutputDirectory #{package_default_path} -Source #{@SourceUrl} -NoCache"
-			puts cyan("Retrieving package  #{package}  from Chillisofts local Nuget")
+			puts cyan("Retrieving package:  #{package} from Nuget server: #{@SourceUrl}")
 			puts("nuget cmd: " + @NugetParameters)
 			if (run_command("Retrieving package #{package} from NuGet server #{@SourceUrl}", @NugetParameters) != true)
 				fail_with_message "Unable to retrieve NuGet package with commandline:\n" + @command + " " + @NugetParameters
