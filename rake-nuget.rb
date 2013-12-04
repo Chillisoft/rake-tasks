@@ -12,7 +12,8 @@ class GetNugetPackages
 	attr_accessor 	:NugetParameters ,
 					:package_names ,
 					:output_folder	,
-					:SourceUrl
+					:SourceUrl,
+					:Version
 	
 	def execute
 		@command = "NuGet.exe"
@@ -23,7 +24,12 @@ class GetNugetPackages
 		FileSystem.DeleteDirectory(package_default_path)
 
 		@package_names.each do  |package|
-			@NugetParameters = "install #{package} -OutputDirectory #{package_default_path} -Source #{@SourceUrl} -NoCache"
+			@@getversion = ""
+			if @Version.kind_of?(String)
+				puts cyan("Nuget version Requested: #{@Version}")
+				@@getversion = "-Version #{@Version}"
+			end
+			@NugetParameters = "install #{package} #{@@getversion} -OutputDirectory #{package_default_path} -Source #{@SourceUrl} -NoCache"
 			puts cyan("Retrieving package:  #{package} from Nuget server: #{@SourceUrl}")
 			puts("nuget cmd: " + @NugetParameters)
 			if (run_command("Retrieving package #{package} from NuGet server #{@SourceUrl}", @NugetParameters) != true)
