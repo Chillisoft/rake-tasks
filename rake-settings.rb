@@ -14,11 +14,13 @@ end
 
 $nunit_console = ''
 $nunit_console_prefered = 'C:/Program Files (x86)/NUnit 2.6.3/bin/nunit-console-x86.exe'
-$dotcover_console = 'C:/Program Files (x86)/Jetbrains/dotCover/v2.5/Bin/dotcover.exe'
+$dotcover_console = 'C:/Program Files (x86)/Jetbrains/dotCover/v2.7/Bin/dotcover.exe'
 $sonar_runner_path = 'C:/Sonar/sonar-runner-2.3/bin/sonar-runner.bat'
 
 def dotcover_additional_versions
-	[	"C:/Program Files (x86)/Jetbrains/dotCover/v2.4/Bin/dotcover.exe",	
+	[	"C:/Program Files (x86)/Jetbrains/dotCover/v2.6/Bin/dotcover.exe",
+		"C:/Program Files (x86)/Jetbrains/dotCover/v2.5/Bin/dotcover.exe",
+		"C:/Program Files (x86)/Jetbrains/dotCover/v2.4/Bin/dotcover.exe",
 		"C:/Program Files (x86)/Jetbrains/dotCover/v2.3/Bin/dotcover.exe",
 		"C:/Program Files (x86)/Jetbrains/dotCover/v2.2/Bin/dotcover.exe",
 		"C:/Program Files (x86)/Jetbrains/dotCover/v2.1/Bin/dotcover.exe",
