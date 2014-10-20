@@ -5,7 +5,9 @@
     "private": true,
     "devDependencies": {
         "karma-cli": "",
-        "istanbul": ""
+        "istanbul": "",
+        "jshint": "",
+        "plato": ""
     },
     "engines": {
         "node": ">=0.10.0"

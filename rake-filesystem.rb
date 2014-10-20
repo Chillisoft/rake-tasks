@@ -103,4 +103,20 @@ module FileSystem
 	def FileSystem.winpath(rubypath)
 		rubypath.gsub!( "/", "\\" )
 	end
+
+    def FileSystem.CaptureOutput(filename)
+        previous_stdout = STDOUT.dup
+        STDOUT.reopen(filename)
+        STDOUT.sync = true
+        yield
+    ensure
+        STDOUT.reopen(previous_stdout)
+        # Win32Console doesn't recover properly after being redirected
+        # So we have to reinitialise it here
+		require "rbconfig"
+        if RbConfig::CONFIG['build'] =~ /mswin/i or RbConfig::CONFIG['build'] =~ /mingw32/i
+            require "win32console"
+            $stdout = Win32::Console::ANSI::IO.new(:stdout)
+        end
+    end
 end
