@@ -6,7 +6,7 @@ module FileSystem
 	def FileSystem.EnsurePath(path)
 		ensure_dir_exists(path)
 	end
-	
+
 	def FileSystem.ensure_dir_exists(d)
 		parts = d.split(File::SEPARATOR)
 		test = nil
@@ -23,13 +23,26 @@ module FileSystem
 		end
 	end
 
-	def FileSystem.ValidFile(prefered,choices) 
-		if File.exist?(prefered) then 
+    # Cross-platform way of finding an executable in the $PATH.
+    #   find_executable('ruby') #=> /usr/bin/ruby
+    def FileSystem.FindExecutable(cmd)
+        exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+        ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+            exts.each { |ext|
+                exe = File.join(path, "#{cmd}#{ext}")
+                return exe if File.executable?(exe) && !File.directory?(exe)
+            }
+        end
+        return nil
+    end
+
+	def FileSystem.ValidFile(prefered,choices)
+		if File.exist?(prefered) then
 			puts ("Found Prefered file : " + prefered)
 			return prefered
 		end
 		choices.each{
-		|filetocheck| 
+		|filetocheck|
 		if File.exist?(filetocheck) then
 			puts ("Prefered file: "+ prefered +" , not found consider updating your version, using : " + filetocheck)
 			return filetocheck
@@ -37,24 +50,24 @@ module FileSystem
 		}
 		return ""
 	end
-	
+
 	def FileSystem.DeleteDirectory(path)
-		if Dir.exists?(path) then 
+		if Dir.exists?(path) then
 			 FileUtils.rm_rf path
 		end
 	end
 
-	def FileSystem.CopyFiles(source, target) 
+	def FileSystem.CopyFiles(source, target)
 		Dir.glob(source) do |name|
 			FileUtils.cp(name, target)
-		end	
+		end
 	end
 
-	def FileSystem.CopyDlls(source, target) 	
+	def FileSystem.CopyDlls(source, target)
 		CopyWithFilter source, target, "*.dll"
 	end
 
-	def FileSystem.CopyExecutables(source, target) 	
+	def FileSystem.CopyExecutables(source, target)
 		CopyWithFilter source, target, "*.exe"
 	end
 
@@ -62,7 +75,7 @@ module FileSystem
 		# will copy files from source folder to target folder that match the filter. filter example : "*.dll"
 		FileUtils.cp_r  Dir.glob( source + "/**/#{filter}"), target
 	end
-		
+
 	def FileSystem.CopyFilesWithoutSVN(source_path, target_path)
 		# Dir.glob("#{source}/**/*").reject{|f| f =~ /^\.svn/}.each do |oldfile|
 			# newfile = target + oldfile.sub(source, '')
@@ -78,12 +91,16 @@ module FileSystem
 			end
 		end
 	end
-	
+
+    def FileSystem.NewestMatchingFile(wildcard)
+        Dir.glob(wildcard).max_by {|f| File.mtime(f)}
+    end
+
 	def FileSystem.rubypath(winpath)
 		winpath.gsub!( "\\","/" )
 	end
 
-	def FileSystem.winpath(rubypath) 
-		rubypath.gsub!( "/", "\\" ) 
+	def FileSystem.winpath(rubypath)
+		rubypath.gsub!( "/", "\\" )
 	end
 end

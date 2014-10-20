@@ -1,0 +1,13 @@
+{
+    "name": "rake-tasks",
+    "description": "Chillisoft Rake Tasks",
+    "version": "1.0.0",
+    "private": true,
+    "devDependencies": {
+        "karma-cli": "",
+        "istanbul": ""
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    }
+}

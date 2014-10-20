@@ -9,7 +9,7 @@ require 'rake-packagemanifest.rb'
 
 if RbConfig::CONFIG['build'] =~ /mswin/i or RbConfig::CONFIG['build'] =~ /mingw32/i
 	require 'win32console'
-	@showcolours = true
+	$showcolours = true
 end
 
 $nunit_console = ''
@@ -40,23 +40,23 @@ end
 class Dotcover
 	include Albacore::Task
 	include Albacore::RunCommand
-	
-	@myassemblies 
+
+	@myassemblies
 	@myfilters
 	@mynunitoptions = ""
-	
+
 	def assemblies ass
 		@myassemblies = ass
 	end
-	
+
 	def filters fil
 		@myfilters = fil
 	end
-	
+
 	def nunitoptions opts
 		@mynunitoptions = opts
 	end
-		
+
 	def execute
 		$nunit_console = FileSystem.ValidFile($nunit_console_prefered, nunit_additional_versions)
 		@command = FileSystem.ValidFile($dotcover_console, dotcover_additional_versions)
@@ -64,7 +64,7 @@ class Dotcover
 		nunit_options = "\"#{ass} /xml=#{Dir.pwd}/nunit-result.xml"
 		nunit_options += " " + @mynunitoptions.to_s if @mynunitoptions.to_s.length > 0
 		nunit_options += "\""
-		run_command "dotcover console coverage analysis", "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=#{nunit_options} /Output=coveragesnapshot /Filters=#{@myfilters} " 
+		run_command "dotcover console coverage analysis", "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=#{nunit_options} /Output=coveragesnapshot /Filters=#{@myfilters} "
 		run_command "dotcover console coverage report (xml)", "report /Source=coveragesnapshot /Output=buildreports/coverage.xml /ReportType=XML"
 		run_command "dotcover console coverage report (html)", "report /Source=coveragesnapshot /Output=buildreports/coverage.html /ReportType=HTML"
 		FileUtils.rm Dir.glob('coveragesnapshot')
@@ -81,7 +81,7 @@ end
     end
   end
 end
-		
+
 Albacore.configure do |config|
 	$nunit_console = FileSystem.ValidFile($nunit_console_prefered, nunit_additional_versions)
 	config.log_level = :quiet
@@ -92,7 +92,7 @@ Albacore.configure do |config|
 end
 
 def colorize(text, color_code)
-	if @showcolours 
+	if $showcolours
 		"#{color_code}\e[1m#{text}\e[0m"
 	else
 		text
@@ -121,12 +121,12 @@ end
 require 'rexml/document'
 include REXML
 
-module FetchXml	
-	
+module FetchXml
+
 	def from_file (filename ,value_element, value_attribute=nil)
 		values = []
 		xmlfile = File.new(filename)
-		xmldoc = Document.new(xmlfile)		
+		xmldoc = Document.new(xmlfile)
 		xmldoc.elements.each(value_element) do |ele|
 		  if value_attribute.to_s.strip.length == 0
 			# It's nil, empty, or just whitespace
@@ -142,7 +142,7 @@ end
 
 module CSVFile
 	def create(filename, rowArray)
-		myfile = File.open(filename, "w") 
+		myfile = File.open(filename, "w")
 		rowArray.each{|row| myfile.puts(row.join(","))}
 		myfile.close
 	end
