@@ -66,26 +66,37 @@ class Karma
 
     def copyCoverageReport()
         reports = File.expand_path(File.join(@base, @reports))
+
         latestJson = FileSystem.NewestMatchingFile("#{reports}/*/coverage*.json")
         if latestJson.nil?
             puts yellow("WARNING: Could not find latest Json coverage report")
-        else
-            puts "Moving coverage.json to #{reports}"
-            FileUtils.mv(latestJson, "#{reports}/coverage.json")
+            return
         end
-        latestCobertura = FileSystem.NewestMatchingFile("#{reports}/*/cobertura-coverage.xml")
-        if latestCobertura.nil?
+        puts "Moving coverage.json to #{reports}"
+        FileUtils.mv(latestJson, "#{reports}/coverage.json")
+
+        latestCoverage = File.dirname(latestJson)
+
+        latestCobertura = "#{latestCoverage}/cobertura-coverage.xml"
+        if not File.exist?(latestCobertura)
             puts yellow("WARNING: Could not find latest Cobertura coverage report")
         else
             puts "Moving cobertura-coverage.xml to #{reports}"
             FileUtils.mv(latestCobertura, "#{reports}/")
-            latestReport = File.join(File.dirname(latestCobertura), "lcov-report")
-            if not File.exist?(latestReport)
-                puts yellow("WARNING: Could not find html lcov-report for coverage")
-            else
-                puts "Moving html lcov-report to #{reports}/coverage"
-                FileUtils.mv(latestReport, "#{reports}/coverage/")
-            end
+        end
+        latestLcovData = "#{latestCoverage}/lcov.info"
+        if not File.exist?(latestLcovData)
+            puts yellow("WARNING: Could not find latest LCOV coverage data")
+        else
+            puts "Moving lcov.info to #{reports}"
+            FileUtils.mv(latestLcovData, "#{reports}/")
+        end
+        latestLcovHtml = "#{latestCoverage}/lcov-report"
+        if not File.exist?(latestLcovHtml)
+            puts yellow("WARNING: Could not find html lcov-report for coverage")
+        else
+            puts "Moving html lcov-report to #{reports}/coverage"
+            FileUtils.mv(latestLcovHtml, "#{reports}/coverage/")
         end
     end
 
