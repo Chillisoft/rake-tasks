@@ -148,3 +148,11 @@ module CSVFile
 	end
 	module_function :create
 end
+
+desc "Update Git Submodules"
+task :update_git_submodules do
+    puts cyan("Updating Git Submodules")
+    system "git submodule update --init --recursive"
+    system "git submodule foreach --recursive git fetch"
+    system "git submodule foreach --recursive git checkout origin"
+end
