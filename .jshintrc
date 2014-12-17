@@ -44,6 +44,5 @@
     "maxcomplexity": false,
     "maxlen": 120,
     // Relaxing
-    "es5": true,
     "esnext": false
 }
