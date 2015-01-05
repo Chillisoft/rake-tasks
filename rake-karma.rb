@@ -1,12 +1,13 @@
 require "rake"
 require "albacore"
+require "runcommandwithfail"
 require "rake-settings"
 require "rake-nodejs"
 require "fileutils"
 
 class Karma
     include Albacore::Task
-    include Albacore::RunCommand
+    include RunCommandWithFail
     include Rake::DSL
 
     # base location of the web project (also location of karma.conf.js)

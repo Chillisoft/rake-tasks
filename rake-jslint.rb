@@ -1,5 +1,6 @@
 require "rake"
 require "albacore"
+require "runcommandwithfail"
 require "rake-nodejs"
 require "rexml/document"
 require "rbconfig"
@@ -11,7 +12,7 @@ end
 
 class JSLint
     include Albacore::Task
-    include Albacore::RunCommand
+    include RunCommandWithFail
     include Rake::DSL
 
     # base location of the web project

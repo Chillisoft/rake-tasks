@@ -1,9 +1,10 @@
 require "albacore"
+require "runcommandwithfail"
 require "rake-filesystem"
 
 class NodeJs
     include Albacore::Task
-    include Albacore::RunCommand
+    include RunCommandWithFail
 
     attr_accessor :base
     attr_accessor :script
@@ -30,7 +31,7 @@ end
 
 class Npm
     include Albacore::Task
-    include Albacore::RunCommand
+    include RunCommandWithFail
 
     attr_accessor :base
 

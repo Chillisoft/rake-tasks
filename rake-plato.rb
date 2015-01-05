@@ -1,10 +1,11 @@
 require "rake"
 require "albacore"
+require "runcommandwithfail"
 require "rake-nodejs"
 
 class Plato
     include Albacore::Task
-    include Albacore::RunCommand
+    include RunCommandWithFail
     include Rake::DSL
 
     # base location of the web project
