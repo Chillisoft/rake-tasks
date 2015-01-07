@@ -1,5 +1,6 @@
 require "rake"
 require "albacore"
+require "runcommandwithfail"
 require "rake-nodejs"
 require "rexml/document"
 require "rbconfig"
@@ -11,7 +12,7 @@ end
 
 class JSLint
     include Albacore::Task
-    include Albacore::RunCommand
+    include RunCommandWithFail
     include Rake::DSL
 
     # base location of the web project
@@ -66,9 +67,7 @@ class JSLint
         report = File.join(reports, "jslint.xml") unless @checkstyle
         report = File.join(reports, "checkstyle-jshint.xml") if @checkstyle
         FileSystem.CaptureOutput(report) do
-            if run_command("JSHint", params) == nil
-              fail_with_message "Unable to run command: #{@command} #{params}"
-            end
+            run_command("JSHint", params, false)
         end
     end
 end

@@ -152,7 +152,7 @@ class Karma
         @working_directory = @base
         params = getParams
 
-        run_command("karma", params)
+        run_command("Karma", params)
 
         copyCoverageReport if @coverage
         istanbulCsvSummary if @coverage
