@@ -2,7 +2,7 @@ require "albacore"
 
 module RunCommandWithFail
     include Albacore::RunCommand
-    
+
     def run_command(name="Command Line", parameters=nil, failWhenCommandFails=true)
         ret = super(name, parameters)
         if ret == nil

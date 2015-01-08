@@ -1,11 +1,12 @@
 require "albacore"
 require "runcommandwithfail"
+require "rake-settings"
 
 class Sonar
     include Albacore::Task
     include RunCommandWithFail
 
-    def execute()
+    def execute
         @command = $sonar_runner_path
         run_command("Sonar")
     end

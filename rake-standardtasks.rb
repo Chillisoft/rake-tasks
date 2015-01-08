@@ -1,0 +1,12 @@
+require "rake"
+require "albacore"
+
+require "rake-settings"
+require "rake-filesystem"
+require "rake-nuget"
+require "rake-dotcover"
+require "rake-sonar"
+require "rake-nodejs"
+require "rake-karma"
+require "rake-jslint"
+require "rake-plato"

@@ -1,14 +1,10 @@
 require "rake"
 require "albacore"
+require "rexml/document"
 require "runcommandwithfail"
 require "rake-nodejs"
-require "rexml/document"
-require "rbconfig"
+require "rake-support"
 require "colorize"
-
-if RbConfig::CONFIG['build'] =~ /mswin/i or RbConfig::CONFIG['build'] =~ /mingw32/i
-    require "win32console"
-end
 
 class JSLint
     include Albacore::Task
@@ -27,22 +23,22 @@ class JSLint
     #   (default ".")
     attr_accessor :source
 
-    # true to run Checkstyle report, false to run jslint
+    # true to run Checkstyle report, false to run JSLint
     #   (default false)
     attr_accessor :checkstyle
 
-    def initialize()
+    def initialize
         @base = "."
         @reports = "buildreports"
 
-        $buildscripts = File.dirname(__FILE__)
-        $jshint = File.join($buildscripts, "node_modules/.bin", "jshint.cmd")
-        unless $jshint.nil?
-            $jshint = File.expand_path($jshint) if File.exists?($jshint)
+        @raketasks = File.dirname(__FILE__)
+        @jshint = File.join(@raketasks, "node_modules/.bin", "jshint.cmd")
+        unless @jshint.nil?
+            @jshint = File.expand_path(@jshint) if File.exists?(@jshint)
         end
 
         npm do |npm|
-            npm.base = $buildscripts
+            npm.base = @raketasks
         end
         Rake::Task[:npm].execute
         Rake::Task[:npm].clear
@@ -50,18 +46,18 @@ class JSLint
         super()
     end
 
-    def execute()
+    def execute
         reports = File.expand_path(File.join(@base, @reports))
         FileSystem.EnsurePath(reports)
 
         source = @source
         source = "." if @source.nil? || @source.length == 0
 
-        @command = $jshint
+        @command = @jshint
         @working_directory = @base
         params = ["--jslint-reporter"] unless @checkstyle
         params = ["--checkstyle-reporter"] if @checkstyle
-        params << "--config" << "#{$buildscripts}/.jshintrc"
+        params << "--config" << "#{@raketasks}/.jshintrc"
         params << source
 
         report = File.join(reports, "jslint.xml") unless @checkstyle
@@ -83,7 +79,7 @@ class JSLintOutput
     #   (default "buildreports/")
     attr_accessor :reports
 
-    def initialize()
+    def initialize
         @base = "."
         @reports = "buildreports"
         super()
@@ -114,7 +110,7 @@ class JSLintOutput
         raise "Can't determine node to look for ):"
     end
 
-    def execute()
+    def execute
         reports = File.expand_path(File.join(@base, @reports))
         reportFilePath = File.join(reports, "jslint.xml") unless @checkstyle
 

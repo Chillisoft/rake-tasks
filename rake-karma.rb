@@ -1,9 +1,9 @@
 require "rake"
 require "albacore"
-require "runcommandwithfail"
-require "rake-settings"
-require "rake-nodejs"
 require "fileutils"
+require "runcommandwithfail"
+require "rake-support"
+require "rake-nodejs"
 
 class Karma
     include Albacore::Task
@@ -30,18 +30,18 @@ class Karma
     #   (default "Chrome" for coverage and continuous, "Chrome,Firefox,IE" for singlerun)
     attr_accessor :browsers
 
-    def initialize()
+    def initialize
         @base = "."
         @reports = "buildreports"
 
-        $buildscripts = File.dirname(__FILE__)
-        $karma = File.join($buildscripts, "node_modules/.bin", "karma.cmd")
-        unless $karma.nil?
-            $karma = File.expand_path($karma) if File.exists?($karma)
+        @buildscripts = File.dirname(__FILE__)
+        @karma = File.join(@buildscripts, "node_modules/.bin", "karma.cmd")
+        unless @karma.nil?
+            @karma = File.expand_path(@karma) if File.exists?(@karma)
         end
 
         npm do |npm|
-            npm.base = $buildscripts
+            npm.base = @buildscripts
         end
         Rake::Task[:npm].execute
         Rake::Task[:npm].clear
@@ -49,13 +49,13 @@ class Karma
         super()
     end
 
-    def cleanupTests()
+    def cleanupTests
         reports = File.expand_path(File.join(@base, @reports))
         FileUtils.rm Dir["#{reports}/TEST-*.xml"]
         FileUtils.rm Dir["#{reports}/test-*.xml"]
     end
 
-    def cleanupCoverage()
+    def cleanupCoverage
         reports = File.expand_path(File.join(@base, @reports))
         FileUtils.rm_rf("#{reports}/coverage/lcov-report")
         FileUtils.rm Dir["#{reports}/cobertura-coverage.xml"]
@@ -65,7 +65,7 @@ class Karma
         FileUtils.rm Dir["#{reports}/lcov.info"]
     end
 
-    def copyCoverageReport()
+    def copyCoverageReport
         reports = File.expand_path(File.join(@base, @reports))
 
         latestJson = FileSystem.NewestMatchingFile("#{reports}/*/coverage*.json")
@@ -101,14 +101,14 @@ class Karma
         end
     end
 
-    def istanbulCsvSummary()
-        @working_directory = $buildscripts
+    def istanbulCsvSummary
+        @working_directory = @buildscripts
 
         reports = File.expand_path(File.join(@base, @reports))
         params = "\"#{reports}\""
 
         nodejs do |node|
-            node.base = $buildscripts
+            node.base = @buildscripts
             node.script = "coverage-csv"
             node.parameters = params
         end
@@ -116,7 +116,7 @@ class Karma
         Rake::Task[:nodejs].clear
     end
 
-    def getParams()
+    def getParams
         params = ["start"]
         params << "--colors"
 
@@ -142,13 +142,13 @@ class Karma
         params
     end
 
-    def execute()
+    def execute
         cleanupTests unless @coverage
         cleanupCoverage
 
         puts yellow("BEWARE: Minimising browser test window(s) will make testing SLOW!")
 
-        @command = $karma
+        @command = @karma
         @working_directory = @base
         params = getParams
 

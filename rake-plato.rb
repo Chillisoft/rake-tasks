@@ -24,18 +24,18 @@ class Plato
     #   (default [])
     attr_accessor :exclude
 
-    def initialize()
+    def initialize
         @base = "."
         @reports = "buildreports/plato"
 
-        $buildscripts = File.dirname(__FILE__)
-        $plato = File.join($buildscripts, "node_modules/.bin", "plato.cmd")
-        unless $plato.nil?
-            $plato = File.expand_path($plato) if File.exists?($plato)
+        buildscripts = File.dirname(__FILE__)
+        @plato = File.join(buildscripts, "node_modules/.bin", "plato.cmd")
+        unless @plato.nil?
+            @plato = File.expand_path(@plato) if File.exists?(@plato)
         end
 
         npm do |npm|
-            npm.base = $buildscripts
+            npm.base = buildscripts
         end
         Rake::Task[:npm].execute
         Rake::Task[:npm].clear
@@ -43,7 +43,7 @@ class Plato
         super()
     end
 
-    def execute()
+    def execute
         reports = File.expand_path(File.join(@base, @reports))
         FileSystem.EnsurePath(reports)
 
@@ -53,7 +53,7 @@ class Plato
         exclude = []
         exclude << @exclude unless @exclude.nil? || @exclude.length == 0
 
-        @command = $plato
+        @command = @plato
         @working_directory = @base
         params = []
         params << "-d" << "\"" + reports + "\""
