@@ -20,6 +20,18 @@ class Dotcover
         super()
     end
 
+    def assemblies(ass)
+        @assemblies = ass
+    end
+
+    def filters(f)
+        @filters = f
+    end
+
+    def nunitoptions(opt)
+        @nunitoptions = opt
+    end
+
     def execute
         @command = $dotcover_console
         ass = @assemblies.collect { |a| File.expand_path(a) }.join(" ")
