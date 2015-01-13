@@ -26,8 +26,9 @@ $sonar_runner_path = "C:/Sonar/sonar-runner-2.3/bin/sonar-runner.bat"
 Albacore.configure do |config|
     $nunit_console = FileSystem.ValidFile($nunit_console, $nunit_additional_versions)
     $dotcover_console = FileSystem.ValidFile($dotcover_console, $dotcover_additional_versions)
-    buildreports = "buildreports"
-    result_xml = File.expand_path(File.join(buildreports, "nunit-result.xml"))
+    buildreports = File.expand_path("buildreports")
+    FileSystem.EnsurePath(buildreports)
+    result_xml = File.join(buildreports, "nunit-result.xml")
     config.log_level = :quiet
     config.nunit do |nunit|
         nunit.command = $nunit_console
