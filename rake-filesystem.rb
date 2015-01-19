@@ -36,18 +36,18 @@ module FileSystem
         return nil
     end
 
-    def FileSystem.ValidFile(prefered,choices)
+    def FileSystem.ValidFile(prefered, alternatives)
         if File.exist?(prefered) then
-            puts ("Found Prefered file : " + prefered)
+            puts("Found Prefered file #{prefered}")
             return prefered
         end
-        choices.each{
-        |filetocheck|
-        if File.exist?(filetocheck) then
-            puts ("Prefered file: "+ prefered +" , not found consider updating your version, using : " + filetocheck)
-            return filetocheck
-        end
+        alternatives.each { |filetocheck|
+            if File.exist?(filetocheck) then
+                puts yellow("Prefered file #{prefered} not found (consider updating your version). Using #{filetocheck}")
+                return filetocheck
+            end
         }
+        puts yellow("Prefered file #{prefered} not found. Attempting to use default version")
         return ""
     end
 

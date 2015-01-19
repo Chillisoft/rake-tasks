@@ -1,6 +1,10 @@
 require "albacore"
 require "rake-filesystem"
 
+$msbuild_exe = "C:/Program Files (x86)/MSBuild/12.0/Bin/msbuild.exe"
+$msbuild_additional_versions = [
+    ]
+
 $nunit_console = "C:/Program Files (x86)/NUnit 2.6.3/bin/nunit-console-x86.exe"
 $nunit_additional_versions = [
         "C:/Program Files (x86)/NUnit 2.6.2/bin/nunit-console-x86.exe",
@@ -24,6 +28,7 @@ $dotcover_additional_versions = [
 $sonar_runner_path = "C:/Sonar/sonar-runner-2.3/bin/sonar-runner.bat"
 
 Albacore.configure do |config|
+    $msbuild_exe = FileSystem.ValidFile($msbuild_exe, $msbuild_additional_versions)
     $nunit_console = FileSystem.ValidFile($nunit_console, $nunit_additional_versions)
     $dotcover_console = FileSystem.ValidFile($dotcover_console, $dotcover_additional_versions)
     buildreports = File.expand_path("buildreports")
