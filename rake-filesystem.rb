@@ -1,5 +1,6 @@
 require "fileutils"
 require "find"
+require "rake-support"
 
 module FileSystem
 
