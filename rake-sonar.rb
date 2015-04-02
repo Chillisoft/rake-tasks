@@ -7,7 +7,7 @@ class Sonar
     include RunCommandWithFail
 
     def execute
-        @command = $sonar_runner_path
+        @command = $sonar_runner
         run_command("Sonar")
     end
 end

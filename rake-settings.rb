@@ -25,12 +25,16 @@ $dotcover_additional_versions = [
         "C:/Program Files (x86)/Jetbrains/dotCover/v1.1/Bin/dotcover.exe"
     ]
 
-$sonar_runner_path = "C:/Sonar/sonar-runner-2.3/bin/sonar-runner.bat"
+$sonar_runner = "C:/Sonar/sonar-runner-2.4/bin/sonar-runner.bat"
+$sonar_runner_additional_versions = [
+        "C:/Sonar/sonar-runner-2.3/bin/sonar-runner.bat"
+    ]
 
 Albacore.configure do |config|
     $msbuild_exe = FileSystem.ValidFile($msbuild_exe, $msbuild_additional_versions)
     $nunit_console = FileSystem.ValidFile($nunit_console, $nunit_additional_versions)
     $dotcover_console = FileSystem.ValidFile($dotcover_console, $dotcover_additional_versions)
+    $sonar_runner = FileSystem.ValidFile($sonar_runner, $sonar_runner_additional_versions)
     buildreports = File.expand_path("buildreports")
     FileSystem.EnsurePath(buildreports)
     result_xml = File.join(buildreports, "nunit-result.xml")
