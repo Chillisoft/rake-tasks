@@ -64,6 +64,15 @@ module FileSystem
         end
     end
 
+    def FileSystem.CopyWithFolders(files, dest, src_root)
+        files.each do |f|
+            f.slice! src_root # the files without src_root dir
+            dest_dir = File.dirname(File.join(dest, f))
+            FileUtils.mkdir_p dest_dir # make dest dir
+            FileUtils.cp(File.join(src_root, f), dest_dir)
+        end
+    end
+
     def FileSystem.CopyDlls(source, target)
         CopyWithFilter source, target, "*.dll"
     end
