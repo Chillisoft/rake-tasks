@@ -30,11 +30,16 @@ $sonar_runner_additional_versions = [
         "C:/Sonar/sonar-runner-2.3/bin/sonar-runner.bat"
     ]
 
+$signtool_exe = "C:/Program Files (x86)/Windows Kits/8.0/bin/x64/signtool.exe"
+$signtool_additional_versions = [
+    ]
+
 Albacore.configure do |config|
     $msbuild_exe = FileSystem.ValidFile($msbuild_exe, $msbuild_additional_versions)
     $nunit_console = FileSystem.ValidFile($nunit_console, $nunit_additional_versions)
     $dotcover_console = FileSystem.ValidFile($dotcover_console, $dotcover_additional_versions)
     $sonar_runner = FileSystem.ValidFile($sonar_runner, $sonar_runner_additional_versions)
+    $signtool_exe = FileSystem.ValidFile($signtool_exe, $signtool_additional_versions)
     buildreports = File.expand_path("buildreports")
     FileSystem.EnsurePath(buildreports)
     result_xml = File.join(buildreports, "nunit-result.xml")
