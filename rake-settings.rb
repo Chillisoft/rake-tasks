@@ -5,8 +5,9 @@ $msbuild_exe = "C:/Program Files (x86)/MSBuild/12.0/Bin/msbuild.exe"
 $msbuild_additional_versions = [
     ]
 
-$nunit_console = "C:/Program Files (x86)/NUnit 2.6.3/bin/nunit-console-x86.exe"
+$nunit_console = "C:/Program Files (x86)/NUnit 2.6.4/bin/nunit-console-x86.exe"
 $nunit_additional_versions = [
+        "C:/Program Files (x86)/NUnit 2.6.3/bin/nunit-console-x86.exe",
         "C:/Program Files (x86)/NUnit 2.6.2/bin/nunit-console-x86.exe",
         "C:/Program Files (x86)/NUnit 2.6.1/bin/nunit-console-x86.exe",
         "C:/Program Files (x86)/NUnit 2.6/bin/nunit-console-x86.exe",
