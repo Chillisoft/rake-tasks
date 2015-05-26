@@ -14,8 +14,9 @@ $nunit_additional_versions = [
         "C:/Program Files (x86)/NUnit 2.5.10/bin/net-2.0/nunit-console-x86.exe"
     ]
 
-$dotcover_console = "C:/Program Files (x86)/Jetbrains/dotCover/v2.7/Bin/dotcover.exe"
+$dotcover_console = "C:/Program Files (x86)/Jetbrains/dotCover/v3.1/Bin/dotcover.exe"
 $dotcover_additional_versions = [
+        "C:/Program Files (x86)/Jetbrains/dotCover/v2.7/Bin/dotcover.exe",
         "C:/Program Files (x86)/Jetbrains/dotCover/v2.6/Bin/dotcover.exe",
         "C:/Program Files (x86)/Jetbrains/dotCover/v2.5/Bin/dotcover.exe",
         "C:/Program Files (x86)/Jetbrains/dotCover/v2.4/Bin/dotcover.exe",
