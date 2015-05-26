@@ -15,6 +15,11 @@ class Dotcover
     #   (default "buildreports/")
     attr_accessor :reports
 
+    # true to cover each assembly separately and merge results, false to run all assemblies at same time
+    #   (default false)
+    # - this hopefully will prevent OutOfMemoryExceptions
+    attr_accessor :partition
+
     def initialize
         @reports = "buildreports"
         super()
@@ -34,18 +39,62 @@ class Dotcover
 
     def execute
         @command = $dotcover_console
-        ass = @assemblies.collect { |a| File.expand_path(a) }.join(" ")
-        result_xml = File.expand_path(File.join(@reports, "nunit-result.xml"))
-        nunit_options = "\"#{ass} /xml=#{result_xml}"
-        nunit_options << " #{@nunitoptions}" if !@nunitoptions.nil? && @nunitoptions.length > 0
-        nunit_options << "\""
         coveragesnapshotfile = File.expand_path(File.join(@reports, "coveragesnapshot"))
+        @assemblies = [@assemblies].flatten
+
+        if @partition
+            snapshots = @assemblies.each_with_index.map { |a,i|
+                snapshot = coveragesnapshotfile + "-#{i}"
+                puts cyan("Covering #{a}")
+                cover [a], snapshot, "nunit-result-#{i}.xml"
+                snapshot
+            }
+            merge snapshots, coveragesnapshotfile
+            delete snapshots
+        else
+            cover @assemblies, coveragesnapshotfile, "nunit-result.xml"
+        end
+
+        reports coveragesnapshotfile
+        delete coveragesnapshotfile
+    end
+
+    def cover(assemblies, coveragesnapshotfile, nunitresultfile)
+        description = "dotCover console coverage analysis"
+        ass = assemblies.map { |a| File.expand_path(a) }.join(" ")
+        result_xml = File.expand_path(File.join(@reports, nunitresultfile))
+        nunit_options = "#{ass}"
+        nunit_options << " /xml=#{result_xml}"
+        nunit_options << " /noshadow"
+        nunit_options << " #{@nunitoptions}" if !@nunitoptions.nil? && @nunitoptions.length > 0
+        cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{@filters}"
+        run_command description, cmdline
+    end
+
+    def merge(snapshots, mastercoveragesnapshotfile)
+        puts cyan("Merging coverage snapshots")
+        description = "dotCover console merge snapshots"
+        source = snapshots.join(";")
+        cmdline = "merge /Source=\"#{source}\" /Output=\"#{mastercoveragesnapshotfile}\""
+        run_command description, cmdline
+    end
+
+    def reports(mastercoveragesnapshotfile)
+        description = "dotCover console coverage report"
         coveragebasename = File.expand_path(File.join(@reports, "coverage"))
-
-        run_command "dotcover console coverage analysis", "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=#{nunit_options} /Output=\"#{coveragesnapshotfile}\" /Filters=#{@filters} "
-        run_command "dotcover console coverage report (xml)", "report /ReportType=XML /Source=\"#{coveragesnapshotfile}\" /Output=\"#{coveragebasename}.xml\""
-        run_command "dotcover console coverage report (html)", "report /ReportType=HTML /Source=\"#{coveragesnapshotfile}\" /Output=\"#{coveragebasename}.html\""
-
-        FileUtils.rm coveragesnapshotfile
+        puts cyan("Generating XML coverage report")
+        cmdline = "report /ReportType=XML /Source=\"#{mastercoveragesnapshotfile}\" /Output=\"#{coveragebasename}.xml\""
+        run_command "#{description} (XML)", cmdline
+        puts cyan("Generating HTML coverage report")
+        cmdline = "report /ReportType=HTML /Source=\"#{mastercoveragesnapshotfile}\" /Output=\"#{coveragebasename}.html\""
+        run_command "#{description} (HTML)", cmdline
+    end
+    
+    def delete(snapshots)
+        puts cyan("Deleting coverage snapshot files")
+        description = "dotCover delete snapshots"
+        source = [snapshots].flatten.join(";")
+        cmdline = "delete /Source=\"#{source}\""
+        run_command "#{description}", cmdline
     end
 end
