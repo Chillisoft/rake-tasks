@@ -1,30 +1,32 @@
 require "albacore"
 require "rake-filesystem"
 
-$msbuild_exe = "C:/Program Files (x86)/MSBuild/12.0/Bin/msbuild.exe"
+$msbuild_exe = "#{ENV['ProgramFiles(x86)']}/MSBuild/12.0/Bin/msbuild.exe"
 $msbuild_additional_versions = [
     ]
 
-$nunit_console = "C:/Program Files (x86)/NUnit 2.6.4/bin/nunit-console-x86.exe"
+$nunit_console = "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.4/bin/nunit-console-x86.exe"
 $nunit_additional_versions = [
-        "C:/Program Files (x86)/NUnit 2.6.3/bin/nunit-console-x86.exe",
-        "C:/Program Files (x86)/NUnit 2.6.2/bin/nunit-console-x86.exe",
-        "C:/Program Files (x86)/NUnit 2.6.1/bin/nunit-console-x86.exe",
-        "C:/Program Files (x86)/NUnit 2.6/bin/nunit-console-x86.exe",
-        "C:/Program Files (x86)/NUnit 2.5.10/bin/net-2.0/nunit-console-x86.exe"
+        "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.3/bin/nunit-console-x86.exe",
+        "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.2/bin/nunit-console-x86.exe",
+        "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.1/bin/nunit-console-x86.exe",
+        "#{ENV['ProgramFiles(x86)']}/NUnit 2.6/bin/nunit-console-x86.exe",
+        "#{ENV['ProgramFiles(x86)']}/NUnit 2.5.10/bin/net-2.0/nunit-console-x86.exe"
     ]
 
-$dotcover_console = "C:/Program Files (x86)/Jetbrains/dotCover/v3.1/Bin/dotcover.exe"
+$dotcover_console = "#{ENV['LOCALAPPDATA']}/JetBrains/Installations/dotCover02/dotCover.exe"
 $dotcover_additional_versions = [
-        "C:/Program Files (x86)/Jetbrains/dotCover/v2.7/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v2.6/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v2.5/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v2.4/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v2.3/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v2.2/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v2.1/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v1.2/Bin/dotcover.exe",
-        "C:/Program Files (x86)/Jetbrains/dotCover/v1.1/Bin/dotcover.exe"
+        "#{ENV['ProgramFiles(x86)']}/JetBrains/Installations/dotCover02/dotCover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v3.1/Bin/dotCover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.7/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.6/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.5/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.4/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.3/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.2/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.1/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v1.2/Bin/dotcover.exe",
+        "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v1.1/Bin/dotcover.exe"
     ]
 
 $sonar_runner = "C:/Sonar/sonar-runner-2.4/bin/sonar-runner.bat"
@@ -32,8 +34,9 @@ $sonar_runner_additional_versions = [
         "C:/Sonar/sonar-runner-2.3/bin/sonar-runner.bat"
     ]
 
-$signtool_exe = "C:/Program Files (x86)/Windows Kits/8.0/bin/x64/signtool.exe"
+$signtool_exe = "#{ENV['ProgramFiles(x86)']}/Windows Kits/8.1/bin/x64/signtool.exe"
 $signtool_additional_versions = [
+        "#{ENV['ProgramFiles(x86)']}/Windows Kits/8.0/bin/x64/signtool.exe"
     ]
 
 Albacore.configure do |config|
