@@ -1,8 +1,9 @@
 require "albacore"
 require "rake-filesystem"
 
-$msbuild_exe = "#{ENV['ProgramFiles(x86)']}/MSBuild/12.0/Bin/msbuild.exe"
+$msbuild_exe = "#{ENV['ProgramFiles(x86)']}/MSBuild/14.0/Bin/msbuild.exe"
 $msbuild_additional_versions = [
+        "#{ENV['ProgramFiles(x86)']}/MSBuild/12.0/Bin/msbuild.exe"
     ]
 
 $nunit_console = "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.4/bin/nunit-console-x86.exe"
@@ -14,9 +15,11 @@ $nunit_additional_versions = [
         "#{ENV['ProgramFiles(x86)']}/NUnit 2.5.10/bin/net-2.0/nunit-console-x86.exe"
     ]
 
-$dotcover_console = "#{ENV['LOCALAPPDATA']}/JetBrains/Installations/dotCover02/dotCover.exe"
+$dotcover_console = "#{ENV['ProgramFiles(x86)']}/JetBrains/Installations/dotCover03/dotCover.exe"
 $dotcover_additional_versions = [
+        "#{ENV['LOCALAPPDATA']}/JetBrains/Installations/dotCover03/dotCover.exe",
         "#{ENV['ProgramFiles(x86)']}/JetBrains/Installations/dotCover02/dotCover.exe",
+        "#{ENV['LOCALAPPDATA']}/JetBrains/Installations/dotCover02/dotCover.exe",
         "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v3.1/Bin/dotCover.exe",
         "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.7/Bin/dotcover.exe",
         "#{ENV['ProgramFiles(x86)']}/Jetbrains/dotCover/v2.6/Bin/dotcover.exe",
