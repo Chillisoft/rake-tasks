@@ -6,8 +6,9 @@ $msbuild_additional_versions = [
         "#{ENV['ProgramFiles(x86)']}/MSBuild/12.0/Bin/msbuild.exe"
     ]
 
-$nunit_console = "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.4/bin/nunit-console-x86.exe"
+$nunit_console = "#{ENV['ProgramFiles(x86)']}/NUnit.org/nunit-console/nunit3-console.exe"
 $nunit_additional_versions = [
+        "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.4/bin/nunit-console-x86.exe",
         "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.3/bin/nunit-console-x86.exe",
         "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.2/bin/nunit-console-x86.exe",
         "#{ENV['ProgramFiles(x86)']}/NUnit 2.6.1/bin/nunit-console-x86.exe",
@@ -54,7 +55,11 @@ Albacore.configure do |config|
     config.log_level = :quiet
     config.nunit do |nunit|
         nunit.command = $nunit_console
-        nunit.options = [ "/xml=\"#{result_xml}\"" ]
+        if $nunit_console =~ /nunit.org/i
+            nunit.options = [ "--x86", "--result=\"#{result_xml}\";format=nunit2" ]
+        else
+            nunit.options = [ "/xml=\"#{result_xml}\"" ]
+        end
     end
 end
 

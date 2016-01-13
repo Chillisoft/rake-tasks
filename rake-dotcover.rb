@@ -63,11 +63,14 @@ class Dotcover
         description = "dotCover console coverage analysis"
         ass = assemblies.map { |a| File.expand_path(a) }.join(" ")
         result_xml = File.expand_path(File.join(@reports, nunitresultfile))
-        nunit_options = "#{ass}"
-        nunit_options << " /xml=#{result_xml}"
-        nunit_options << " /noshadow"
-        nunit_options << " #{@nunitoptions}" if !@nunitoptions.nil? && @nunitoptions.length > 0
-        cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{@filters}"
+        nunit_options = ["#{ass}"]
+        if $nunit_console =~ /nunit.org/i
+            nunit_options << ["--x86", "--result=#{result_xml};format=nunit2"]
+        else
+            nunit_options << ["/xml=#{result_xml}", "/noshadow"]
+        end
+        nunit_options << @nunitoptions
+        cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options.join(' ')}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{[*@filters].join(';')}"
         run_command description, cmdline
     end
 
