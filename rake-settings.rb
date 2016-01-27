@@ -16,8 +16,10 @@ $nunit_additional_versions = [
         "#{ENV['ProgramFiles(x86)']}/NUnit 2.5.10/bin/net-2.0/nunit-console-x86.exe"
     ]
 
-$dotcover_console = "#{ENV['ProgramFiles(x86)']}/JetBrains/Installations/dotCover03/dotCover.exe"
+$dotcover_console = "#{ENV['ProgramFiles(x86)']}/JetBrains/Installations/dotCover04/dotCover.exe"
 $dotcover_additional_versions = [
+        "#{ENV['LOCALAPPDATA']}/JetBrains/Installations/dotCover04/dotCover.exe",
+        "#{ENV['ProgramFiles(x86)']}/JetBrains/Installations/dotCover03/dotCover.exe",
         "#{ENV['LOCALAPPDATA']}/JetBrains/Installations/dotCover03/dotCover.exe",
         "#{ENV['ProgramFiles(x86)']}/JetBrains/Installations/dotCover02/dotCover.exe",
         "#{ENV['LOCALAPPDATA']}/JetBrains/Installations/dotCover02/dotCover.exe",
