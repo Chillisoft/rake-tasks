@@ -47,7 +47,7 @@ class Npm
         @command = "npm"
         @working_directory = @base
 
-        params = ["install"]
+        params = ["update"]
         run_command("npm", params)
     end
 end

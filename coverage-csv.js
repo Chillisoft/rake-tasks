@@ -3,7 +3,7 @@ var path = require('path'),
         istanbul = require('istanbul'),
         Report = istanbul.Report,
         Collector = istanbul.Collector,
-        mkdirp = require('./node_modules/istanbul/node_modules/mkdirp'),
+        mkdirp = require('./node_modules/mkdirp'),
         utils = require('./node_modules/istanbul/lib/object-utils'),
         filesFor = require('./node_modules/istanbul/lib/util/file-matcher').filesFor;
 
