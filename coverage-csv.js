@@ -66,10 +66,11 @@ filesFor({
     root: buildreports_location,
     includes: ['coverage.json']
 }, function(err, files) {
-    console.log('Using reporter [csv-summary]');
     if (!err && !files.length) {
-        err = "ERROR: Could not find coverage.json. Ensure Karma has JSON coverageReporter configured";
+        console.log("ERROR: Could not find coverage.json in \"" + buildreports_location + "\"");
+        return 1;
     }
+    console.log('Using reporter [csv-summary]');
     if (err) {
         throw err;
     }

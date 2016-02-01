@@ -40,11 +40,9 @@ class Karma
             @karma = File.expand_path(@karma) if File.exists?(@karma)
         end
 
-        npm do |npm|
-            npm.base = @buildscripts
-        end
-        Rake::Task[:npm].execute
-        Rake::Task[:npm].clear
+        npm = Npm.new
+        npm.base = @buildscripts
+        npm.update
 
         super()
     end
@@ -70,7 +68,7 @@ class Karma
 
         latestJson = FileSystem.NewestMatchingFile("#{reports}/*/coverage*.json")
         if latestJson.nil?
-            puts yellow("WARNING: Could not find latest Json coverage report")
+            puts yellow("WARNING: Could not find latest Json coverage report. Ensure Karma has JSON coverageReporter configured")
             return
         end
         puts "Moving coverage.json to #{reports}"
@@ -133,16 +131,32 @@ class Karma
         end
         params << "--browsers #{browsers}" unless browsers.nil?
 
-        params << "--reporters progress" unless @singlerun || @coverage
-        params << "--reporters dots,junit" if @singlerun
-        params << "--reporters dots,coverage" if @coverage
+        params << "--reporters nested" unless @singlerun || @coverage
+        params << "--reporters nested,junit,sonarqubeUnit" if @singlerun
+        params << "--reporters nested,coverage" if @coverage
 
         params << "--report-slower-than 0" unless @singlerun || @coverage
 
         params
     end
 
+    def installNodePrerequisites
+        puts "Checking Karma pre-requisites"
+        npm = Npm.new
+        npm.base = @base
+        npm.require(
+            "karma-chrome-launcher" => "",
+            "karma-firefox-launcher" => "",
+            "karma-ie-launcher" => "",
+            "karma-nested-reporter" => "",
+            "karma-coverage" => ">=0.5.3",
+            "karma-junit-reporter" => ">=0.3.8",
+            "karma-sonarqube-unit-reporter" => ">=0.0.2"
+        )
+    end
+
     def execute
+        installNodePrerequisites
         cleanupTests unless @coverage
         cleanupCoverage
 
