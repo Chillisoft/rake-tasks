@@ -51,22 +51,12 @@ Albacore.configure do |config|
     $dotcover_console = FileSystem.ValidFile($dotcover_console, $dotcover_additional_versions)
     $sonar_runner = FileSystem.ValidFile($sonar_runner, $sonar_runner_additional_versions)
     $signtool_exe = FileSystem.ValidFile($signtool_exe, $signtool_additional_versions)
-    buildreports = File.expand_path("buildreports")
-    FileSystem.EnsurePath(buildreports)
-    result_xml = File.join(buildreports, "nunit-result.xml")
     config.log_level = :quiet
-    config.nunit do |nunit|
-        nunit.command = $nunit_console
-        if $nunit_console =~ /nunit.org/i
-            nunit.options = [ "--x86", "--result=\"#{result_xml}\";format=nunit2" ]
-        else
-            nunit.options = [ "/xml=\"#{result_xml}\"" ]
-        end
-    end
 end
 
 ## For backward compatibility only
 require "rake-support"
+require "rake-nunit"
 require "rake-dotcover"
 require "rake-fetchxml"
 require "rake-csvfile"

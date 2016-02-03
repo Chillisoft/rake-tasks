@@ -65,9 +65,9 @@ class Dotcover
         result_xml = File.expand_path(File.join(@reports, nunitresultfile))
         nunit_options = ["#{ass}"]
         if $nunit_console =~ /nunit.org/i
-            nunit_options << ["--x86", "--result=#{result_xml};format=nunit2"]
+            nunit_options << "--x86" << "--result=#{result_xml};format=nunit2"
         else
-            nunit_options << ["/xml=#{result_xml}", "/noshadow"]
+            nunit_options << "/xml=#{result_xml}" << "/noshadow"
         end
         nunit_options << @nunitoptions
         cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options.join(' ')}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{[*@filters].join(';')}"
