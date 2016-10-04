@@ -5,7 +5,7 @@ include RbConfig
 
 # Setup colourized console output
 if RbConfig::CONFIG["build"] =~ /mswin/i or RbConfig::CONFIG["build"] =~ /mingw32/i
-    require "win32console"
+    require "win32console" unless RUBY_VERSION >= "2.0.0"
     $showcolours = true
 end
 
