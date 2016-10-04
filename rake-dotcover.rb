@@ -20,8 +20,13 @@ class Dotcover
     # - this hopefully will prevent OutOfMemoryExceptions
     attr_accessor :partition
 
+    # whether NUnit should run tests in 64bit mode (NUnit 3+ only)
+    #   (default false)
+    attr_accessor :x64
+
     def initialize
         @reports = "buildreports"
+        @x64 = false
         super()
     end
 
@@ -65,7 +70,8 @@ class Dotcover
         result_xml = File.expand_path(File.join(@reports, nunitresultfile))
         nunit_options = ["#{ass}"]
         if $nunit_console =~ /nunit.org/i
-            nunit_options << "--x86" << "--result=#{result_xml};format=nunit2"
+            nunit_options << "--x86" unless @x64
+            nunit_options << "--result=#{result_xml};format=nunit2"
         else
             nunit_options << "/xml=#{result_xml}" << "/noshadow"
         end
