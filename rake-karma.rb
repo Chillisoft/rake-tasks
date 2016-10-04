@@ -145,6 +145,7 @@ class Karma
         npm = Npm.new
         npm.base = @base
         npm.require(
+            "karma" => "",
             "karma-chrome-launcher" => "",
             "karma-firefox-launcher" => "",
             "karma-ie-launcher" => "",

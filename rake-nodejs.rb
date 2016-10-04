@@ -74,6 +74,10 @@ class Npm
         run "update", parameters
     end
 
+    def install *parameters
+        run "install", parameters
+    end
+
     def require packages
         return if packages.nil? || packages.length == 0
         packageJson = File.join(@base, "package.json")
@@ -85,10 +89,11 @@ class Npm
         end
         devDependencies.keys.sort.each { |key| devDependencies[key] = devDependencies.delete key }
         File.write(packageJson, JSON.pretty_generate(obj))
-        update
+        install
     end
 
     def execute
+        install
         run @command, @parameters
     end
 end
