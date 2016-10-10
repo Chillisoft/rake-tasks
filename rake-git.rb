@@ -1,4 +1,3 @@
-require "albacore"
 require "rake-support"
 
 desc "Update Git Submodules"

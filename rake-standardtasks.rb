@@ -1,4 +1,5 @@
 require "rake"
+gem "albacore", "~>0.3"
 require "albacore"
 
 require "rake-settings"
