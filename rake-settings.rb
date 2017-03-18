@@ -1,11 +1,7 @@
 gem "albacore", "~>0.3"
 require "albacore"
 require "rake-filesystem"
-
-$msbuild_exe = "#{ENV['ProgramFiles(x86)']}/MSBuild/14.0/Bin/msbuild.exe"
-$msbuild_additional_versions = [
-        "#{ENV['ProgramFiles(x86)']}/MSBuild/12.0/Bin/msbuild.exe"
-    ]
+require "rubygems"
 
 $nunit_console = "#{ENV['ProgramFiles(x86)']}/NUnit.org/nunit-console/nunit3-console.exe"
 $nunit_additional_versions = [
@@ -50,8 +46,21 @@ $signtool_additional_versions = [
         "#{ENV['ProgramFiles(x86)']}/Windows Kits/8.0/bin/x64/signtool.exe"
     ]
 
+def getLatestMSBuild
+    installationPath = `#{File.dirname(__FILE__)}/vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath`
+    installationPath = "#{ENV['ProgramFiles(x86)']}" if installationPath.nil? || installationPath.empty?
+    msbuilds = Dir.glob("#{FileSystem.rubypath(installationPath)}/MSBuild/**/Bin/msbuild.exe")
+    latestMsbuild = msbuilds.sort_by { |path| Gem::Version.new(path.split("/")[-3]) }.last
+    if File.exist?(latestMsbuild) then
+        puts "Found MSBuild at #{latestMsbuild}"
+        return latestMsbuild
+    end
+    puts yellow("Latest MSBuild not found. Attempting to use default version")
+    return ""
+end
+
 Albacore.configure do |config|
-    $msbuild_exe = FileSystem.ValidFile($msbuild_exe, $msbuild_additional_versions)
+    $msbuild_exe = getLatestMSBuild()
     $nunit_console = FileSystem.ValidFile($nunit_console, $nunit_additional_versions)
     $dotcover_console = FileSystem.ValidFile($dotcover_console, $dotcover_additional_versions)
     $sonar_runner = FileSystem.ValidFile($sonar_runner, $sonar_runner_additional_versions)
