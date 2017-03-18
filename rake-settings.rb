@@ -47,11 +47,11 @@ $signtool_additional_versions = [
     ]
 
 def getLatestMSBuild
-    installationPath = `#{File.dirname(__FILE__)}/vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath`
+    installationPath = `#{File.dirname(__FILE__)}/vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath`.strip
     installationPath = "#{ENV['ProgramFiles(x86)']}" if installationPath.nil? || installationPath.empty?
-    msbuilds = Dir.glob("#{FileSystem.rubypath(installationPath)}/MSBuild/**/Bin/msbuild.exe")
-    latestMsbuild = msbuilds.sort_by { |path| Gem::Version.new(path.split("/")[-3]) }.last
-    if File.exist?(latestMsbuild) then
+    msbuilds = Dir.glob("#{FileSystem.rubypath(installationPath)}/MSBuild/**/Bin/amd64/MSBuild.exe")
+    latestMsbuild = msbuilds.sort_by { |path| Gem::Version.new(path.split("/")[-4]) }.last
+    if !latestMsbuild.nil? && !latestMsbuild.empty? && File.exist?(latestMsbuild) then
         puts "Found MSBuild at #{latestMsbuild}"
         return latestMsbuild
     end
