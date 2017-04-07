@@ -26,9 +26,9 @@ class NUnit < NUnitTestRunner
         result_xml = File.join(buildreports, "nunit-result.xml")
         if $nunit_console =~ /nunit.org/i
             @options << "--x86" unless @x64
-            @options << "--result=#{result_xml};format=nunit2"
+            @options << "--result=\"#{result_xml}\";format=nunit2"
         else
-            @options << "/xml=#{result_xml}" << "/noshadow"
+            @options << "/xml=\"#{result_xml}\"" << "/noshadow"
         end
         super()
     end

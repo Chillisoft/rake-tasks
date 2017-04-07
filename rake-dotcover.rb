@@ -66,17 +66,17 @@ class Dotcover
 
     def cover(assemblies, coveragesnapshotfile, nunitresultfile)
         description = "dotCover console coverage analysis"
-        ass = assemblies.map { |a| File.expand_path(a) }.join(" ")
+        ass = assemblies.map { |a| "\"#{File.expand_path(a)}\"" }.join(" ")
         result_xml = File.expand_path(File.join(@reports, nunitresultfile))
         nunit_options = ["#{ass}"]
         if $nunit_console =~ /nunit.org/i
             nunit_options << "--x86" unless @x64
-            nunit_options << "--result=#{result_xml};format=nunit2"
+            nunit_options << "--result=\"#{result_xml}\";format=nunit2"
         else
-            nunit_options << "/xml=#{result_xml}" << "/noshadow"
+            nunit_options << "/xml=\"#{result_xml}\"" << "/noshadow"
         end
         nunit_options << @nunitoptions
-        cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options.join(' ')}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{[*@filters].join(';')}"
+        cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options.join(' ').gsub("\"", "\"\"")}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{[*@filters].join(';')}"
         run_command description, cmdline
     end
 
