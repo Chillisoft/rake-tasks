@@ -76,7 +76,7 @@ class Dotcover
             nunit_options << "/xml=\"#{result_xml}\"" << "/noshadow"
         end
         nunit_options << @nunitoptions
-        cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options.join(' ').gsub("\"", "\"\"")}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{[*@filters].join(';')}"
+        cmdline = "cover /TargetExecutable=\"#{$nunit_console}\" /AnalyseTargetArguments=false /TargetArguments=\"#{nunit_options.join(' ').gsub("\"", "\"\"")}\" /Output=\"#{coveragesnapshotfile}\" /Filters=#{[*@filters].join(';')} /ProcessFilters=-:sqlservr.exe"
         run_command description, cmdline
     end
 
