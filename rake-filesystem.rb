@@ -121,12 +121,14 @@ module FileSystem
         yield
     ensure
         STDOUT.reopen(previous_stdout)
-        # Win32Console doesn't recover properly after being redirected
-        # So we have to reinitialise it here
-        require "rbconfig"
-        if RbConfig::CONFIG['build'] =~ /mswin/i or RbConfig::CONFIG['build'] =~ /mingw32/i
-            require "win32console"
-            $stdout = Win32::Console::ANSI::IO.new(:stdout)
+        if RUBY_VERSION < "2.0.0"
+            # Win32Console doesn't recover properly after being redirected
+            # So we have to reinitialise it here
+            require "rbconfig"
+            if RbConfig::CONFIG['build'] =~ /mswin/i or RbConfig::CONFIG['build'] =~ /mingw32/i
+                require "win32console"
+                $stdout = Win32::Console::ANSI::IO.new(:stdout)
+            end
         end
     end
 end
