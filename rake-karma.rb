@@ -51,6 +51,8 @@ class Karma
         reports = File.expand_path(File.join(@base, @reports))
         FileUtils.rm Dir["#{reports}/TEST-*.xml"]
         FileUtils.rm Dir["#{reports}/test-*.xml"]
+        FileUtils.rm Dir["#{reports}/TESTS-*.xml"]
+        FileUtils.rm Dir["#{reports}/ut_report*.xml"]
     end
 
     def cleanupCoverage
@@ -97,6 +99,7 @@ class Karma
             puts "Moving html lcov-report to #{reports}/coverage"
             FileUtils.mv(latestLcovHtml, "#{reports}/coverage/")
         end
+        FileUtils.rm_rf latestCoverage
     end
 
     def istanbulCsvSummary
@@ -132,8 +135,8 @@ class Karma
         params << "--browsers #{browsers}" unless browsers.nil?
 
         params << "--reporters nested" unless @singlerun || @coverage
-        params << "--reporters nested,junit,sonarqubeUnit" if @singlerun
-        params << "--reporters nested,coverage" if @coverage
+        params << "--reporters nested,junit" if @singlerun
+        params << "--reporters nested,coverage,sonarqubeUnit" if @coverage
 
         params << "--report-slower-than 0" unless @singlerun || @coverage
 
