@@ -160,7 +160,7 @@ class Karma
     end
 
     def execute
-        installNodePrerequisites
+        # installNodePrerequisites
         cleanupTests unless @coverage
         cleanupCoverage
 

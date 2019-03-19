@@ -2,3 +2,5 @@ node_modules/
 Gemfile.lock
 *.swp
 npm-debug.log
+
+package-lock.json
