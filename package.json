@@ -5,7 +5,7 @@
     "private": true,
     "devDependencies": {
         "istanbul": "^0.4.5",
-        "jshint": "^2.10.2",
+        "jshint": "^2.10.3",
         "karma-cli": "^2.0.0",
         "mkdirp": "^0.5.1",
         "nyc": "^13.3.0",
